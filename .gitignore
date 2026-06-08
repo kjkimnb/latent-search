@@ -9,8 +9,10 @@ venv/
 runs/
 outputs/
 wandb/
+checkpoints/
 *.pt
 *.ckpt
 
 data/
 datasets/
+external/

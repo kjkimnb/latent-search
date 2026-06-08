@@ -31,13 +31,22 @@ class VisualFoundationEncoder(nn.Module):
             self.eval()
 
     @torch.no_grad()
-    def forward(self, pixel_values: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
-        dino_out = self.dino(pixel_values=pixel_values)
+    def forward(
+        self,
+        dino_pixel_values: torch.Tensor,
+        siglip_pixel_values: torch.Tensor | None = None,
+    ) -> tuple[torch.Tensor, torch.Tensor]:
+        if siglip_pixel_values is None:
+            siglip_pixel_values = dino_pixel_values
+        try:
+            dino_out = self.dino(pixel_values=dino_pixel_values, interpolate_pos_encoding=True)
+        except TypeError:
+            dino_out = self.dino(pixel_values=dino_pixel_values)
         dino_tokens = dino_out.last_hidden_state
         if dino_tokens.shape[1] > 1:
             dino_tokens = dino_tokens[:, 1:]
 
-        siglip_out = self.siglip.vision_model(pixel_values=pixel_values, output_hidden_states=True)
+        siglip_out = self.siglip.vision_model(pixel_values=siglip_pixel_values, output_hidden_states=True)
         siglip_tokens = siglip_out.last_hidden_state
         return dino_tokens, siglip_tokens
 

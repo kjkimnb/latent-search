@@ -13,6 +13,8 @@ dependencies = [
   "torch>=2.2",
   "PyYAML>=6.0",
   "h5py>=3.10",
+  "imageio>=2.31",
+  "pillow>=10.0",
   "tqdm>=4.66",
   "transformers>=4.40",
 ]
