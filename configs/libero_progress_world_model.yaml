@@ -1,0 +1,58 @@
+seed: 0
+device: cuda
+
+data:
+  history: 4
+  horizon: 6
+  action_dim: 7
+  stride: 1
+  val_fraction: 0.05
+  dino_key: dino
+  siglip_key: siglip
+  action_key: actions
+  text_key: text_emb
+
+model:
+  dino_dim: 768
+  siglip_dim: 768
+  dino_tokens: 81
+  siglip_tokens: 81
+  text_dim: 768
+  action_dim: 7
+  hidden_dim: 512
+  depth: 8
+  num_heads: 8
+  dropout: 0.1
+  diffusion_steps: 100
+  beta_start: 0.0001
+  beta_end: 0.02
+
+progress:
+  hidden_dim: 512
+  depth: 3
+  margin: 0.2
+  pair_gap_min: 1
+  pairs_per_window: 4
+
+planner:
+  kind: cem
+  horizon: 6
+  action_dim: 7
+  num_samples: 256
+  elite_frac: 0.1
+  iterations: 4
+  gamma: 0.98
+  action_low: [-1, -1, -1, -1, -1, -1, -1]
+  action_high: [1, 1, 1, 1, 1, 1, 1]
+  terminal_weight: 1.0
+  trajectory_weight: 1.0
+
+train:
+  batch_size: 32
+  epochs: 50
+  lr: 0.0001
+  weight_decay: 0.000001
+  grad_clip: 1.0
+  num_workers: 4
+  log_every: 50
+  save_every: 5
